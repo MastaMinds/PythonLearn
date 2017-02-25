@@ -4,3 +4,4 @@ git clone https
 git add start.py
 git status
 git commit -m "First commit" start.py
+git push -u origin master
