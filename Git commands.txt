@@ -1,0 +1,6 @@
+git config --global user.name "MastaMinds"
+git config --global user.email 
+git clone https
+git add start.py
+git status
+git commit -m "First commit" start.py
