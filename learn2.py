@@ -25,3 +25,7 @@ try:
 except:
     b=-1
 print "Second",b
+
+fruit="mango"
+letter=fruit[2]
+print letter
