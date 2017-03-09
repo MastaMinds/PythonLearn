@@ -27,5 +27,7 @@ except:
 print "Second",b
 
 fruit="mango"
-letter=fruit[2]
-print letter
+print fruit
+print "The letters are:"
+for i in range(len(fruit)):
+    print fruit[i]
