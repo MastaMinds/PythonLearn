@@ -1,0 +1,7 @@
+Numerical Modeling
+Compressible Fluid Dynamics
+Aerodynamics
+Aerospace Structures
+Flight Dynamics
+Dynamics and Control
+Advaned Aerospace Control
