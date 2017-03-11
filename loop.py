@@ -38,8 +38,17 @@ for value in [9,41,12,3,74,15]:
         break
     print found,value
 
+def sum_list(lister):
+    sum=0
+    for x in lister:
+        sum+=x
+    return sum
 
+MyList=[1,2,3,4]
+sum=sum_list(MyList)
+print sum
 
+    
 num2=raw_input("Input a number:")
 num2=int(num2)
 mult=1
