@@ -48,6 +48,16 @@ MyList=[1,2,3,4]
 sum=sum_list(MyList)
 print sum
 
+fruit="Avocado"
+print fruit[0:4]
+print fruit[4:]
+count=0
+for letter in fruit:
+    print letter
+    if letter=="o":
+        count=count+1
+print count
+
     
 num2=raw_input("Input a number:")
 num2=int(num2)
