@@ -1,5 +1,6 @@
 # Introducing Numpy
-import numpy as np
+import numpy as np # There is also a math library using math.function
+import math
 
 # Tuple and list
 MyTuple=(1,2,3,4,5)
@@ -42,9 +43,18 @@ print(F[2,2]) # Element (3,3)
 
 ls=np.linspace(1,10,10)
 print(ls)
+ls2=np.arange(5)
+print ls2
 
 # Numpy functions
 A=np.array(A,float)
 print(np.cos(A))
 print(A**2)
 print(A/2)
+
+for i in [0,1,2]:
+    for j in range(3):
+        print(math.sqrt(F[i,j])) 
+
+J=np.dot(B,np.transpose(B))
+print(J)
