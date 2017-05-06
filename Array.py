@@ -1,6 +1,13 @@
 # Introducing Numpy
-import numpy as np # There is also a math library using math.function
-import math
+from numpy import \
+array,linspace,cos,eye,pi,e,exp,sin
+
+#Matplotlib
+from matplotlib.pyplot import\
+plot,show,figure,subplot,xlim,ylim
+
+# Scipy
+import scipy as sc
 
 # Tuple and list
 MyTuple=(1,2,3,4,5)
@@ -9,20 +16,20 @@ print(type(MyTuple))
 print(type(MyList))
 
 # Arrays and operations
-A=np.array([1,2,3,4])
-B=np.array([7,6,5,4])
+A=array([1,2,3,4])
+B=array([7,6,5,4])
 C=A+B
 print C
-E=np.array(MyTuple)
+E=array(MyTuple)
 print(type(E))
 
-F=np.array([[1,2,3],
+F=array([[1,2,3],
             [4,5,6],
             [7,8,9]])
 print(F)
 # Array properties
 A.dtype
-G=np.eye(3)
+G=eye(3)
 print(len(A))
 print(G.shape)
 print(G.size)
@@ -30,31 +37,35 @@ print(G.ndim)
 
 # Change data in an array (Character, complex, float, int)
 # Or boolean: True/ False
-np.array(A,float)
-H=np.array(MyList)
-print(np.array(H,complex))
+array(A,float)
+H=array(MyList)
+print(array(H,complex))
 
 # List of list of lists
-I=np.array([[[1,2,3],[4,5,6],[7,8,9]],[[1,2,3],[4,5,6],[7,8,9]]])
+I=array([[[1,2,3],[4,5,6],[7,8,9]],[[1,2,3],[4,5,6],[7,8,9]]])
 
 print(B[0]) # 1st element
 print(B[3]) # 4th element
 print(F[2,2]) # Element (3,3)
 
-ls=np.linspace(1,10,10)
+ls=linspace(1,10,10)
 print(ls)
-ls2=np.arange(5)
-print ls2
 
 # Numpy functions
-A=np.array(A,float)
-print(np.cos(A))
+A=array(A,float)
+print(cos(A))
 print(A**2)
 print(A/2)
+print(cos(pi/2))
+print([e,exp(1)])
 
-for i in [0,1,2]:
-    for j in range(3):
-        print(math.sqrt(F[i,j])) 
+x=linspace(-pi,pi,256,endpoint=True)
+C=cos(x)
+S=sin(x)
 
-J=np.dot(B,np.transpose(B))
-print(J)
+subplot(111)
+plot(x,C,color="red",linewidth=1.0,linestyle="-")
+plot(x,S,color="blue",linewidth=1.0,linestyle="-")
+xlim(-4.0,4.0)
+ylim(-1.0,1.0)
+show()
