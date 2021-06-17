@@ -205,16 +205,6 @@ ax2.set_title('Step response of cantilever system')
 ax2.grid(True)
 ax2.legend(['Original system','With LQR controller'])
 
-# figure(1)
-# plot(T,Y,Tc,Yc);
-# title('Tip displacement of the beam')
-# xlabel('Time (seconds)')
-# ylabel('Displacement (m)')
-# grid on
-# legend('Without LQR',['With LQR \rho= ',num2str(rho)])
-
-
-
 
 #%%  LQR Controller + Observer
 # rhoo=0.01;
