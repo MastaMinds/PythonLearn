@@ -6,7 +6,8 @@ White noise, FFT, and PSD
 """
 
 import numpy as np
-import numpy.fft as npfft
+from numpy import fft
+from scipy import signal
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 import random
@@ -39,38 +40,52 @@ pd.plotting.autocorrelation_plot(WNsignal)
 
 #%% FFT and PSD
 np.random.seed(19695601)
-diff = 0.01
-ax = np.arange(0, 10, diff)
-n = np.random.randn(len(ax))
-by = np.exp(-ax/0.05)
+dt = 0.01
+tspan = np.arange(0, 10 + dt, dt)
+n = np.random.randn(len(tspan))
+by = np.exp(-tspan/0.05)
 
 cn = np.convolve(n, by)
-cn = cn[:len(ax)]
-s = 0.1 * np.sin(2 *np.pi *ax) + cn
+cn = cn[:len(tspan)]
+s = 0.1 * np.sin(2 *np.pi *tspan) + cn
 
-freq_sample = 0.5 * (1/diff) # Sampling frequency
-df = 1/ax[-1]
-freq = np.arange(df, freq_sample, df)
-signal_fft = npfft.fft(s)
+freq_sample = 0.5 * (1/dt) # Sampling frequency
+df = 1/tspan[-1]
+freq = np.arange(df, freq_sample + df, df)
+signal_fft = fft.fft(s)
 signal_fft = signal_fft[:len(freq)]
+signal_fft = abs(signal_fft)
+# Filtered signal
+f_c = 10/freq_sample # cut-off frequency
+sos = signal.butter(5, f_c, 'lp', output='sos')
+signal_filtered = signal.sosfilt(sos, s)
+filtered_fft = fft.fft(signal_filtered)
+filtered_fft = filtered_fft[:len(freq)]
+filtered_fft = abs(filtered_fft)
+
 
 fig0 = plt.figure()
 ax0 = fig0.add_axes([0,0,1,1])
 ax0.plot(freq, signal_fft)
+ax0.plot(freq, filtered_fft)
 ax0.set_xlabel('Frequency (Hz)')
 ax0.set_ylabel('FFT')
 ax0.set_title('FFT for the random signal')
+#ax0.legend(['Original signal','Filtered signal'])
 ax0.grid(True)
 
 fig3, (ax31, ax32) = plt.subplots(2,1)
 
-ax31.plot(ax, s)
+ax31.plot(tspan, s)
+ax31.plot(tspan, signal_filtered)
 ax31.set_xlabel('time')
 ax31.set_ylabel('signal')
 ax31.set_title('Generated signal for PSD')
+ax31.legend(['Original signal','Filtered signal'])
 ax31.grid(True)
 
-ax32.psd(s, 512, 1/diff)
+ax32.psd(s, 512, 1/dt)
+ax32.psd(signal_filtered, 512, 1/dt)
 ax32.set_xscale('log')
 
 #%% Second example
