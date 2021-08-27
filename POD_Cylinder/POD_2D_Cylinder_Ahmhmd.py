@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d as mplot3d
 import pandas as pd
 from scipy.interpolate import griddata
+from scipy import ndimage
 
 Main_path = 'C:/Users/ahmhm/POD_Cylinder/Cylinder_2D_Laminar/'
 
@@ -56,8 +57,8 @@ U2 = griddata((x,y), U[:,2], (x_a, y_a), method='linear')
 U3 = griddata((x,y), U[:,3], (x_a, y_a), method='linear')
 U4 = griddata((x,y), U[:,4], (x_a, y_a), method='linear')
 
-x_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
-y_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
+# x_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
+# y_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 z_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U0[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U1[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
@@ -141,3 +142,12 @@ surf4 = ax4.plot_trisurf(x, y, U[:,4], triangles = TriGrid.triangles, vmin = Non
 ax4.set_ylim(0, 1)
 ax4.set_xlim(-0.5, 0.5)
 plt.colorbar(surf4)
+
+U2img = ndimage.rotate(U2, 90)
+fig5 = plt.figure()
+ax5 = fig5.add_axes([0,0,1,1])
+surf5 = ax5.imshow(U2img, cmap= 'Spectral' , interpolation = 'nearest', 
+                   origin = 'lower', extent = [y_a.min(), y_a.max(), x_a.min(), x_a.max()])
+plt.colorbar(surf5)
+
+
