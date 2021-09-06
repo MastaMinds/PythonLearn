@@ -45,11 +45,11 @@ for k in range(N):
     
 U, Sigma, V = np.linalg.svd(X)
 
-y = test_table['Points:0']
-x = test_table['Points:1']
+x = test_table['Points:0']
+y = test_table['Points:1']
 z = test_table['vorticity:2']
 
-y_a, x_a = np.mgrid[-0.2:1:0.0005, -0.5:0.5:0.0005]
+x_a, y_a = np.mgrid[-0.2:1:0.0005, -0.5:0.5:0.0005]
 z_a = griddata((x,y), z, (x_a, y_a), method='linear')
 U0 = griddata((x,y), U[:,0], (x_a, y_a), method='linear')
 U1 = griddata((x,y), U[:,1], (x_a, y_a), method='linear')
@@ -74,24 +74,8 @@ ax00.plot_surface(x_a, y_a, z_a, cmap= 'Spectral',linewidth=0,
 ax00.set_ylim(-0.1, 1)
 ax00.set_xlim(-0.5, 0.5)
 
-ax01 = plt.axes(projection='3d')
-ax01.view_init(-90, 0)
-ax01.plot_surface(x_a, y_a, U2, cmap= 'Spectral',linewidth=0,
-                  antialiased=False)
-ax01.set_ylim(-0.1, 1)
-ax01.set_xlim(-0.5, 0.5)
 
 TriGrid = mp.tri.Triangulation(x, y)
-
-fig = plt.figure()
-ax = mplot3d.Axes3D(fig)
-ax.view_init(-90, 0)
-surf = ax.plot_trisurf(x, y, z, triangles = TriGrid.triangles, vmin = -2,
-                       vmax = 2, cmap = 'Spectral', edgecolor = 'none',
-                       linewidth = 0, antialiased = False) # vmax and vmin: 'None'
-ax.set_ylim(-0.5, 0.5)
-ax.set_xlim(-0.5, 0.5)
-plt.colorbar(surf)
 
 fig0 = plt.figure()
 ax0 = mplot3d.Axes3D(fig0)
@@ -101,53 +85,40 @@ surf0 = ax0.plot_trisurf(x, y, U[:,0], triangles = TriGrid.triangles, vmin = Non
                        linewidth = 0, antialiased = False) # vmax and vmin: 'None'
 ax0.set_ylim(0, 1)
 ax0.set_xlim(-0.5, 0.5)
-plt.colorbar(surf0)
+fig0.colorbar(surf0)
 
-fig1 = plt.figure()
-ax1 = mplot3d.Axes3D(fig1)
-ax1.view_init(-90, 0)
-surf1 = ax1.plot_trisurf(x, y, U[:,1], triangles = TriGrid.triangles, vmin = None,
-                       vmax = None, cmap = 'Spectral', edgecolor = 'none',
-                       linewidth = 0, antialiased = False) # vmax and vmin: 'None'
-ax1.set_ylim(0, 1)
-ax1.set_xlim(-0.5, 0.5)
-plt.colorbar(surf1)
+fig8 = plt.figure()
+ax8 = fig8.add_axes([0,0,1,1])
+surf8 = ax8.pcolor(x_a, y_a, U0, cmap= 'Spectral' , shading = 'auto')
+fig8.colorbar(surf8)
+ax8.set_ylim(-0.5, 0.5)
+ax8.set_xlim(-0.2, 1)
 
-fig2 = plt.figure()
-ax2 = mplot3d.Axes3D(fig2)
-ax2.view_init(-90, 0)
-surf2 = ax2.plot_trisurf(x, y, U[:,2], triangles = TriGrid.triangles, vmin = None,
-                       vmax = None, cmap = 'Spectral', edgecolor = 'none',
-                       linewidth = 0, antialiased = False) # vmax and vmin: 'None'
-ax2.set_ylim(0, 1)
-ax2.set_xlim(-0.5, 0.5)
-plt.colorbar(surf2)
+fig6 = plt.figure()
+ax6 = fig6.add_axes([0,0,1,1])
+surf6 = ax6.pcolor(x_a, y_a, U1, cmap= 'Spectral' , shading = 'auto')
+fig6.colorbar(surf6)
+ax6.set_ylim(-0.5, 0.5)
+ax6.set_xlim(-0.2, 1)
 
-fig3 = plt.figure()
-ax3 = mplot3d.Axes3D(fig3)
-ax3.view_init(-90, 0)
-surf3 = ax3.plot_trisurf(x, y, U[:,3], triangles = TriGrid.triangles, vmin = None,
-                       vmax = None, cmap = 'Spectral', edgecolor = 'none',
-                       linewidth = 0, antialiased = False) # vmax and vmin: 'None'
-ax3.set_ylim(0, 1)
-ax3.set_xlim(-0.5, 0.5)
-plt.colorbar(surf3)
-
-fig4 = plt.figure()
-ax4 = mplot3d.Axes3D(fig4)
-ax4.view_init(-90, 0)
-surf4 = ax4.plot_trisurf(x, y, U[:,4], triangles = TriGrid.triangles, vmin = None,
-                       vmax = None, cmap = 'Spectral', edgecolor = 'none',
-                       linewidth = 0, antialiased = False) # vmax and vmin: 'None'
-ax4.set_ylim(0, 1)
-ax4.set_xlim(-0.5, 0.5)
-plt.colorbar(surf4)
-
-U2img = ndimage.rotate(U2, 90)
 fig5 = plt.figure()
 ax5 = fig5.add_axes([0,0,1,1])
-surf5 = ax5.imshow(U2img, cmap= 'Spectral' , interpolation = 'nearest', 
-                   origin = 'lower', extent = [y_a.min(), y_a.max(), x_a.min(), x_a.max()])
-plt.colorbar(surf5)
+surf5 = ax5.pcolor(x_a, y_a, U2, cmap= 'Spectral' , shading = 'auto')
+fig5.colorbar(surf5)
+ax5.set_ylim(-0.5, 0.5)
+ax5.set_xlim(-0.2, 1)
 
+fig7 = plt.figure()
+ax7 = fig7.add_axes([0,0,1,1])
+surf7 = ax7.pcolor(x_a, y_a, U3, cmap= 'Spectral' , shading = 'auto')
+fig7.colorbar(surf7)
+ax7.set_ylim(-0.5, 0.5)
+ax7.set_xlim(-0.2, 1)
+
+fig9 = plt.figure()
+ax9 = fig9.add_axes([0,0,1,1])
+surf9 = ax9.pcolor(x_a, y_a, U4, cmap= 'Spectral' , shading = 'auto')
+fig9.colorbar(surf9)
+ax9.set_ylim(-0.5, 0.5)
+ax9.set_xlim(-0.2, 1)
 
