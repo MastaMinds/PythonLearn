@@ -13,6 +13,7 @@ import mpl_toolkits.mplot3d as mplot3d
 import pandas as pd
 from scipy.interpolate import griddata
 from scipy import ndimage
+from AhmhmdFunctions import *
 
 Main_path = 'C:/Users/ahmhm/POD_Cylinder/Cylinder_2D_Laminar/'
 
@@ -49,13 +50,23 @@ x = test_table['Points:0']
 y = test_table['Points:1']
 z = test_table['vorticity:2']
 
-x_a, y_a = np.mgrid[-0.2:1:0.0005, -0.5:0.5:0.0005]
-z_a = griddata((x,y), z, (x_a, y_a), method='linear')
-U0 = griddata((x,y), U[:,0], (x_a, y_a), method='linear')
-U1 = griddata((x,y), U[:,1], (x_a, y_a), method='linear')
-U2 = griddata((x,y), U[:,2], (x_a, y_a), method='linear')
-U3 = griddata((x,y), U[:,3], (x_a, y_a), method='linear')
-U4 = griddata((x,y), U[:,4], (x_a, y_a), method='linear')
+x0 = -0.2
+x_end = 1
+dx = 0.0005
+y0 = -0.5
+y_end = 0.5
+dy = 0.0005
+x_a1 = np.arange(x0, x_end, dx)
+y_a1 = np.arange(y0, y_end, dy)
+x_ar = [x0, x_end, dx]
+y_ar = [y0, y_end, dy]
+
+x_a, y_a, z_a = get2DGridData(x, y, z,  x_ar, y_ar)
+_, _, U0 = get2DGridData(x, y, U[:,0],  x_ar, y_ar)
+_, _, U1 = get2DGridData(x, y, U[:,1],  x_ar, y_ar)
+_, _, U2 = get2DGridData(x, y, U[:,2],  x_ar, y_ar)
+_, _, U3 = get2DGridData(x, y, U[:,3],  x_ar, y_ar)
+_, _, U4 = get2DGridData(x, y, U[:,4],  x_ar, y_ar)
 
 # x_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 # y_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
@@ -117,7 +128,7 @@ ax7.set_xlim(-0.2, 1)
 
 fig9 = plt.figure()
 ax9 = fig9.add_axes([0,0,1,1])
-surf9 = ax9.pcolor(x_a, y_a, U4, cmap= 'Spectral' , shading = 'auto')
+surf9 = ax9.pcolor(x_a1, y_a1, U4, cmap= 'Spectral' , shading = 'auto')
 fig9.colorbar(surf9)
 ax9.set_ylim(-0.5, 0.5)
 ax9.set_xlim(-0.2, 1)
