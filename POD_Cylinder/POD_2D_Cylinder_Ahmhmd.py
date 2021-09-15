@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d as mplot3d
 import pandas as pd
 from scipy.interpolate import griddata
-from scipy import ndimage
 from AhmhmdFunctions import *
 
 Main_path = 'C:/Users/ahmhm/POD_Cylinder/Cylinder_2D_Laminar/'
@@ -37,7 +36,7 @@ for i in range(N):
     
     # Append data matrix using current snapshot data
     X[:,i] = data_all[i]['U:0']
-    # X[:,i] = data_all[i]['vorticity:2']
+    # X[:,i] = data_all[i]['vorticity:0']
     print('Finished data file number'+str(i+1))
 
 X_mean = X.mean(axis=1)
@@ -45,6 +44,10 @@ for k in range(N):
     X[:,k] = X[:,k] - X_mean
     
 U, Sigma, V = np.linalg.svd(X)
+
+E_tot = np.zeros((N,))
+for i in range(len(Sigma)):
+    E_tot[i] = Sigma[:i+1].sum()
 
 x = test_table['Points:0']
 y = test_table['Points:1']
@@ -67,6 +70,7 @@ _, _, U1 = get2DGridData(x, y, U[:,1],  x_ar, y_ar)
 _, _, U2 = get2DGridData(x, y, U[:,2],  x_ar, y_ar)
 _, _, U3 = get2DGridData(x, y, U[:,3],  x_ar, y_ar)
 _, _, U4 = get2DGridData(x, y, U[:,4],  x_ar, y_ar)
+_, _, U5 = get2DGridData(x, y, U[:,5],  x_ar, y_ar)
 
 # x_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 # y_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
@@ -75,8 +79,9 @@ U0[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U1[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U2[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U3[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
-U4[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
+U5[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 
+#%% Plotting results
 
 ax00 = plt.axes(projection='3d')
 ax00.view_init(-90, 0)
@@ -100,36 +105,60 @@ fig0.colorbar(surf0)
 
 fig8 = plt.figure()
 ax8 = fig8.add_axes([0,0,1,1])
-surf8 = ax8.pcolor(x_a, y_a, U0, cmap= 'Spectral' , shading = 'auto')
+surf8 = ax8.pcolor(x_a, y_a, U0, cmap= 'seismic' , shading = 'auto')
 fig8.colorbar(surf8)
 ax8.set_ylim(-0.5, 0.5)
 ax8.set_xlim(-0.2, 1)
 
 fig6 = plt.figure()
 ax6 = fig6.add_axes([0,0,1,1])
-surf6 = ax6.pcolor(x_a, y_a, U1, cmap= 'Spectral' , shading = 'auto')
+surf6 = ax6.pcolor(x_a, y_a, U1, cmap= 'seismic' , shading = 'auto')
 fig6.colorbar(surf6)
 ax6.set_ylim(-0.5, 0.5)
 ax6.set_xlim(-0.2, 1)
 
 fig5 = plt.figure()
 ax5 = fig5.add_axes([0,0,1,1])
-surf5 = ax5.pcolor(x_a, y_a, U2, cmap= 'Spectral' , shading = 'auto')
+surf5 = ax5.pcolor(x_a, y_a, U2, cmap= 'seismic' , shading = 'auto')
 fig5.colorbar(surf5)
 ax5.set_ylim(-0.5, 0.5)
 ax5.set_xlim(-0.2, 1)
 
 fig7 = plt.figure()
 ax7 = fig7.add_axes([0,0,1,1])
-surf7 = ax7.pcolor(x_a, y_a, U3, cmap= 'Spectral' , shading = 'auto')
+surf7 = ax7.pcolor(x_a, y_a, U3, cmap= 'seismic' , shading = 'auto')
 fig7.colorbar(surf7)
 ax7.set_ylim(-0.5, 0.5)
 ax7.set_xlim(-0.2, 1)
 
 fig9 = plt.figure()
 ax9 = fig9.add_axes([0,0,1,1])
-surf9 = ax9.pcolor(x_a1, y_a1, U4, cmap= 'Spectral' , shading = 'auto')
+surf9 = ax9.pcolor(x_a1, y_a1, U4, cmap= 'seismic' , shading = 'auto')
 fig9.colorbar(surf9)
 ax9.set_ylim(-0.5, 0.5)
 ax9.set_xlim(-0.2, 1)
 
+fig91 = plt.figure()
+ax91 = fig91.add_axes([0,0,1,1])
+surf91 = ax91.pcolor(x_a1, y_a1, U5, cmap= 'seismic' , shading = 'auto')
+fig91.colorbar(surf91)
+ax91.set_ylim(-0.5, 0.5)
+ax91.set_xlim(-0.2, 1)
+
+fig10 = plt.figure()
+ax10 = fig10.add_axes([0,0,1,1])
+ax10.plot(Sigma / Sigma.sum(),'r-o')
+ax10.set_xlabel('ith POD mode')
+ax10.set_ylabel('$\Sigma_i / \Sigma_{sum}$')
+ax10.set_title('Energy content per POD mode')
+ax10.set_xlim(0,50)
+ax10.grid(True)
+
+fig11 = plt.figure()
+ax11 = fig11.add_axes([0,0,1,1])
+ax11.plot(E_tot / Sigma.sum(),'b-o')
+ax11.set_xlabel('ith POD mode')
+ax11.set_ylabel('Total energy of modes')
+ax11.set_title('Energy content per POD mode')
+ax11.set_xlim(0,50)
+ax11.grid(True)
