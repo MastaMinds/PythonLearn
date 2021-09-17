@@ -14,12 +14,13 @@ import pandas as pd
 from scipy.interpolate import griddata
 from AhmhmdFunctions import *
 
-Main_path = 'C:/Users/ahmhm/POD_Cylinder/Cylinder_2D_Laminar/'
+# Main_path = 'C:/Users/ahmhm/POD_Cylinder/Cylinder_2D_Laminar/'
+Main_path = 'C:/Users/ahmhm/POD_Cylinder/New_Cylinder_Case/'
 
-dt = 0.1
-T_final = 100
+dt = 2
+T_final = 400
 t = np.arange(dt, T_final +dt, dt)
-N = 900
+N = 200
 Main_file = Main_path + 'Cylinder_2D_Foam_1.csv'
 filenames = N*[0]
 data_all = N*[0]
@@ -31,12 +32,12 @@ n_nodes = test_table.shape[0]
 # Data matrix
 X = np.zeros([n_nodes, N])
 for i in range(N):
-    filenames[i] = Main_path + 'Cylinder_2D_Foam_' + str(i+1) + '.csv'
+    filenames[i] = Main_path + 'Cylinder_2D_Foam_' + str(i) + '.csv'
     data_all[i] = pd.read_csv(filenames[i])
     
     # Append data matrix using current snapshot data
     X[:,i] = data_all[i]['U:0']
-    # X[:,i] = data_all[i]['vorticity:0']
+    # X[:,i] = data_all[i]['vorticity:2']
     print('Finished data file number'+str(i+1))
 
 X_mean = X.mean(axis=1)
@@ -71,6 +72,8 @@ _, _, U2 = get2DGridData(x, y, U[:,2],  x_ar, y_ar)
 _, _, U3 = get2DGridData(x, y, U[:,3],  x_ar, y_ar)
 _, _, U4 = get2DGridData(x, y, U[:,4],  x_ar, y_ar)
 _, _, U5 = get2DGridData(x, y, U[:,5],  x_ar, y_ar)
+_, _, U6 = get2DGridData(x, y, U[:,6],  x_ar, y_ar)
+_, _, U7 = get2DGridData(x, y, U[:,7],  x_ar, y_ar)
 
 # x_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 # y_a[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
@@ -79,7 +82,10 @@ U0[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U1[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U2[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U3[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
+U4[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 U5[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
+U6[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
+U7[np.sqrt(x_a**2 + y_a**2) <= 0.1] = np.nan
 
 #%% Plotting results
 
@@ -144,6 +150,20 @@ surf91 = ax91.pcolor(x_a1, y_a1, U5, cmap= 'seismic' , shading = 'auto')
 fig91.colorbar(surf91)
 ax91.set_ylim(-0.5, 0.5)
 ax91.set_xlim(-0.2, 1)
+
+fig92 = plt.figure()
+ax92 = fig92.add_axes([0,0,1,1])
+surf92 = ax92.pcolor(x_a1, y_a1, U6, cmap= 'seismic' , shading = 'auto')
+fig92.colorbar(surf91)
+ax92.set_ylim(-0.5, 0.5)
+ax92.set_xlim(-0.2, 1)
+
+fig93 = plt.figure()
+ax93 = fig93.add_axes([0,0,1,1])
+surf93 = ax93.pcolor(x_a1, y_a1, U7, cmap= 'seismic' , shading = 'auto')
+fig93.colorbar(surf91)
+ax93.set_ylim(-0.5, 0.5)
+ax93.set_xlim(-0.2, 1)
 
 fig10 = plt.figure()
 ax10 = fig10.add_axes([0,0,1,1])
